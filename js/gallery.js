@@ -65,13 +65,35 @@ const images = [
 ];
 
 
-<li class="gallery-item">
-  <a class="gallery-link" href="large-image.jpg">
+
+
+
+const markUp = images.map(({preview, original, description}) =>
+`<li class="gallery-item">
+  <a class="gallery-link" href="${original}">
     <img
       class="gallery-image"
-      src="small-image.jpg"
-      data-source="large-image.jpg"
-      alt="Image description"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
     />
   </a>
-</li>
+</li>`).join("");
+
+const galleryList = document.querySelector(".gallery");
+
+galleryList.insertAdjacentHTML("beforeend", markUp);
+
+galleryList.addEventListener("click", (event) => {
+  event.preventDefault();
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
+
+  const instance = basicLightbox.create(`
+	<img src="${event.target.dataset.source}" alt="${event.target.alt}" width="860" />
+`)
+
+instance.show()
+
+  })
